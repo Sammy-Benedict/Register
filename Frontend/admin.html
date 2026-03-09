@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title id="pageTitle">Department Portal - Admin</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="config.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const department = sessionStorage.getItem('selectedDepartment') || 'Department';
+            document.getElementById('pageTitle').textContent = `${department} Portal - Admin`;
+            const logoSpan = document.querySelector('.logo span');
+            if (logoSpan) logoSpan.textContent = `${department} Portal`;
+        });
+    </script>
+</head>
+<body>
+    <header class="topbar">
+        <div class="logo">
+            <span>Department Portal</span>
+        </div>
+        <nav class="top-nav">
+            <a href="index.html">Home</a>
+            <a href="profile.html">Profile</a>
+            <a href="support.html">Support</a>
+            <a href="admin.html">Admin</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <a href="index.html" class="side-link">Home</a>
+            <a href="profile.html" class="side-link">Profile</a>
+            <a href="support.html" class="side-link">Support</a>
+            <a href="admin.html" class="side-link active">Admin</a>
+            <button class="register-btn" id="refreshAdminBtn">Refresh Data</button>
+        </aside>
+
+        <main class="content">
+            <div class="page-hero">
+                <div>
+                    <p class="eyebrow">Admin</p>
+                    <h2>Registration Dashboard</h2>
+                    <p class="subtitle">Live overview of registrations and payment completion.</p>
+                </div>
+                <div class="hero-card">
+                    <div class="stat">
+                        <span class="stat-label">Total Students</span>
+                        <span class="stat-value" id="total">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Paid Students</span>
+                        <span class="stat-value success" id="paid">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="adminMessage" class="info-banner" aria-live="polite"></div>
+
+            <div class="card">
+                <span class="badge">Students</span>
+                <h3>All Registered Students</h3>
+                <div class="admin-controls">
+                    <label for="sortByLevel">Sort by Level:</label>
+                    <select id="sortByLevel" class="styled-select">
+                        <option value="">All Levels</option>
+                        <option value="Fresher">Fresher</option>
+                        <option value="200">200 Level</option>
+                        <option value="300">300 Level</option>
+                        <option value="400">400 Level</option>
+                    </select>
+                    <label for="sortByClass">Sort by Class:</label>
+                    <select id="sortByClass" class="styled-select">
+                        <option value="">All Classes</option>
+                        <option value="Diploma">Diploma</option>
+                        <option value="BTech">BTech</option>
+                        <option value="HND">HND</option>
+                        <option value="Weekend">Weekend</option>
+                    </select>
+                </div>
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Full Name</th>
+                                <th>Index Number</th>
+                                <th>Email</th>
+                                <th>Telephone</th>
+                                <th>Programme</th>
+                                <th>Class</th>
+                                <th>Amount Paid</th>
+                                <th>Documents</th>
+                                <th>Result Slip</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentsBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

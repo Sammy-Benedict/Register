@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title id="pageTitle">Department Portal - Support</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="config.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const department = sessionStorage.getItem('selectedDepartment') || 'Department';
+            document.getElementById('pageTitle').textContent = `${department} Portal - Support`;
+            const logoSpan = document.querySelector('.logo span');
+            if (logoSpan) logoSpan.textContent = `${department} Portal`;
+        });
+    </script>
+</head>
+<body>
+    <header class="topbar">
+        <div class="logo">
+            <span>CS Portal</span>
+        </div>
+        <nav class="top-nav">
+            <a href="index.html">Home</a>
+            <a href="profile.html">Profile</a>
+            <a href="support.html">Support</a>
+            <a href="admin.html">Admin</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <a href="index.html" class="side-link">Home</a>
+            <a href="profile.html" class="side-link">Profile</a>
+            <a href="support.html" class="side-link active">Support</a>
+            <a href="admin.html" class="side-link">Admin</a>
+            <button class="register-btn">Open Ticket</button>
+        </aside>
+
+        <main class="content">
+            <div class="page-hero">
+                <div>
+                    <p class="eyebrow">Support</p>
+                    <h2>We Are Here To Help</h2>
+                    <p class="subtitle">Get answers fast or contact the department support team.</p>
+                </div>
+                <div class="hero-card">
+                    <div class="stat">
+                        <span class="stat-label">Response</span>
+                        <span class="stat-value success">Within 24h</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Channels</span>
+                        <span class="stat-value">Email + Chat</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Hours</span>
+                        <span class="stat-value">8:00-17:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="support-grid">
+                <div class="support-card">
+                    <h4>Registration Issues</h4>
+                    <p class="subtitle">Problems submitting your form or uploading documents.</p>
+                    <div class="list">
+                        <div class="list-item">
+                            <span>Common Fixes</span>
+                            <span class="pill">Checklist</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="support-card">
+                    <h4>Payment Questions</h4>
+                    <p class="subtitle">Confirm payment status and troubleshoot failed transactions.</p>
+                    <div class="list">
+                        <div class="list-item">
+                            <span>Payment Status</span>
+                            <span class="pill">Pending</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="support-card">
+                    <h4>Course Advising</h4>
+                    <p class="subtitle">Need help selecting electives or balancing your schedule.</p>
+                    <div class="list">
+                        <div class="list-item">
+                            <span>Advisor</span>
+                            <span class="pill">CS Office</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="card">
+                <span class="badge">Contact</span>
+                <h3>Reach Support</h3>
+                <div class="list">
+                    <div class="list-item">
+                        <span>Email</span>
+                        <span class="pill">support@csportal.edu</span>
+                    </div>
+                    <div class="list-item">
+                        <span>Phone</span>
+                        <span class="pill">+233 20 000 0000</span>
+                    </div>
+                    <div class="list-item">
+                        <span>Office</span>
+                        <span class="pill">Room B2, CS Dept</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

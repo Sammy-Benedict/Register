@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title id="pageTitle">Department Portal - Profile</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="config.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const department = sessionStorage.getItem('selectedDepartment') || 'Department';
+            document.getElementById('pageTitle').textContent = `${department} Portal - Profile`;
+            const logoSpan = document.querySelector('.logo span');
+            if (logoSpan) logoSpan.textContent = `${department} Portal`;
+        });
+    </script>
+</head>
+<body>
+    <header class="topbar">
+        <div class="logo">
+            <span>Department Portal</span>
+        </div>
+        <nav class="top-nav">
+            <a href="index.html">Home</a>
+            <a href="profile.html">Profile</a>
+            <a href="support.html">Support</a>
+            <a href="admin.html">Admin</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <a href="index.html" class="side-link">Home</a>
+            <a href="profile.html" class="side-link active">Profile</a>
+            <a href="support.html" class="side-link">Support</a>
+            <a href="admin.html" class="side-link">Admin</a>
+            <button class="register-btn">Update Profile</button>
+        </aside>
+
+        <main class="content">
+            <div class="page-hero">
+                <div>
+                    <p class="eyebrow">Profile</p>
+                    <h2>Student Overview</h2>
+                    <p class="subtitle">Keep your details current and track your registration progress.</p>
+                </div>
+                <div class="hero-card">
+                    <div class="stat">
+                        <span class="stat-label">Payment</span>
+                        <span class="stat-value success" id="profilePaymentStatus">Pending</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Documents</span>
+                        <span class="stat-value" id="profileDocumentsCount">0 Uploaded</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Class</span>
+                        <span class="stat-value" id="profileClass">-</span>
+                    </div>
+                </div>
+            </div>
+            <div id="profileMessage" class="info-banner" aria-live="polite"></div>
+            <button type="button" class="refresh-btn" id="refreshProfileBtn">Refresh Profile</button>
+
+            <div class="grid">
+                <div class="card">
+                    <span class="badge">Profile</span>
+                    <h3>Personal Details</h3>
+                    <div class="list">
+                        <div class="list-item">
+                            <span>Full Name</span>
+                            <span class="pill" id="profileFullName">-</span>
+                        </div>
+                        <div class="list-item">
+                            <span>Index Number</span>
+                            <span class="pill" id="profileIndexNumber">-</span>
+                        </div>
+                        <div class="list-item">
+                            <span>Email</span>
+                            <span class="pill" id="profileEmail">-</span>
+                        </div>
+                        <div class="list-item">
+                            <span>Programme</span>
+                            <span class="pill" id="profileProgramme">-</span>
+                        </div>
+                        <div class="list-item">
+                            <span>Class</span>
+                            <span class="pill" id="profileProgramClass">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <span class="badge">Progress</span>
+                    <h3>Registration Status</h3>
+                    <div class="list">
+                        <div class="list-item">
+                            <span>Form Submission</span>
+                            <span class="pill" id="profileFormStatus">Not Submitted</span>
+                        </div>
+                        <div class="list-item">
+                            <span>Document Review</span>
+                            <span class="pill">In Review</span>
+                        </div>
+                        <div class="list-item">
+                            <span>Payment</span>
+                            <span class="pill" id="profilePaymentPill">Pending</span>
+                        </div>
+                        <div class="list-item">
+                            <span>Result Slip</span>
+                            <a class="pill" id="profileResultSlipLink" href="#" target="_blank" rel="noopener noreferrer">Not Available</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <span class="badge">Next Step</span>
+                    <h3>Recommended Actions</h3>
+                    <div class="list">
+                        <div class="list-item">
+                            <span>Upload missing documents</span>
+                            <span class="pill" id="profileMissingDocs">0 File</span>
+                        </div>
+                        <div class="list-item">
+                            <span>Proceed to payment</span>
+                            <span class="pill">GHS 350</span>
+                        </div>
+                        <div class="list-item">
+                            <span>Confirm course load</span>
+                            <span class="pill">6 Courses</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="config.js"></script>
+    <script src="profile.js"></script>
+</body>
+</html>

@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Department Portal - Student Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="config.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const department = sessionStorage.getItem('selectedDepartment') || 'Department';
+            document.getElementById('pageTitle').textContent = `${department} Portal - Student Dashboard`;
+            const logoSpan = document.querySelector('.logo span');
+            if (logoSpan) logoSpan.textContent = `${department} Portal`;
+        });
+    </script>
+    <style>
+        /* Dashboard Layout */
+        body.dashboard-page {
+            background: #f5f7fa;
+        }
+
+        .dashboard-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-hero h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .dashboard-hero p {
+            margin: 0.5rem 0 0 0;
+            opacity: 0.9;
+        }
+
+        .dashboard-welcome {
+            flex: 1;
+        }
+
+        .dashboard-user-info {
+            text-align: right;
+        }
+
+        .user-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .dashboard-container {
+            display: flex;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .dashboard-sidebar {
+            width: 250px;
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+        }
+
+        .dashboard-sidebar .menu-item {
+            display: block;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            color: #5a6b7a;
+            text-decoration: none;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .dashboard-sidebar .menu-item:hover {
+            background: #f5f7fa;
+            color: #2f80ed;
+        }
+
+        .dashboard-sidebar .menu-item.active {
+            background: #e8f0ff;
+            color: #2f80ed;
+            border-left-color: #2f80ed;
+        }
+
+        .dashboard-sidebar .logout-item {
+            padding: 1rem;
+            background: #fff5f5;
+            color: #ff6a3d;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            margin-top: 1rem;
+        }
+
+        .dashboard-sidebar .logout-item:hover {
+            background: #ffe8e0;
+        }
+
+        .dashboard-main {
+            flex: 1;
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .dashboard-tab-content {
+            display: none;
+        }
+
+        .dashboard-tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Registration Tab Styles */
+        .registration-form {
+            max-width: 600px;
+        }
+
+        .form-section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #0c1b2a;
+            margin: 2rem 0 1.5rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e8eef5;
+        }
+
+        .form-section-title:first-child {
+            margin-top: 0;
+        }
+
+        /* Profile Tab Styles */
+        .profile-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .profile-info h3 {
+            margin: 0 0 0.5rem 0;
+            color: #0c1b2a;
+        }
+
+        .profile-status {
+            display: inline-block;
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .profile-detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .detail-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .detail-label {
+            font-size: 0.85rem;
+            color: #5a6b7a;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-value {
+            font-size: 1rem;
+            color: #0c1b2a;
+            font-weight: 500;
+        }
+
+        .payment-status {
+            background: white;
+            border-left: 4px solid #2e7d32;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .payment-status.unpaid {
+            border-left-color: #f57c00;
+        }
+
+        .payment-status h4 {
+            margin: 0 0 0.5rem 0;
+        }
+
+        /* Support Tab Styles */
+        .support-content {
+            max-width: 700px;
+        }
+
+        .support-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .support-box h4 {
+            margin: 0 0 0.5rem 0;
+            color: #0c1b2a;
+        }
+
+        .support-box p {
+            margin: 0;
+            color: #5a6b7a;
+            line-height: 1.6;
+        }
+
+        .support-box a {
+            color: #2f80ed;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .support-box a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .dashboard-container {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .dashboard-sidebar {
+                width: 100%;
+                display: flex;
+                gap: 1rem;
+                padding: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .dashboard-sidebar .menu-item {
+                flex: 1;
+                min-width: 150px;
+                margin-bottom: 0;
+            }
+
+            .dashboard-sidebar .logout-item {
+                flex: 1;
+                min-width: 150px;
+                margin-top: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-hero {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .dashboard-hero h1 {
+                font-size: 1.4rem;
+            }
+
+            .dashboard-user-info {
+                text-align: center;
+                margin-top: 1rem;
+            }
+
+            .dashboard-container {
+                margin: 1rem auto;
+                padding: 0 1rem;
+            }
+
+            .profile-detail-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="dashboard-page">
+    <!-- Navigation Header -->
+    <header class="topbar">
+        <div class="logo">
+            <span>Department Registration Portal</span>
+        </div>
+        <nav class="top-nav">
+            <a href="index.html">Home</a>
+            <span id="userGreeting" style="color: white; padding: 0 1rem;"></span>
+        </nav>
+    </header>
+
+    <!-- Dashboard Hero -->
+    <div class="dashboard-hero">
+        <div class="dashboard-welcome">
+            <h1>Student Dashboard</h1>
+            <p>Manage your registration and profile information</p>
+        </div>
+        <div class="dashboard-user-info">
+            <div class="user-badge" id="departmentBadge">Department</div>
+        </div>
+    </div>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <aside class="dashboard-sidebar">
+            <a class="menu-item active" onclick="switchTab('registration')">
+                📋 Registration
+            </a>
+            <a class="menu-item" onclick="switchTab('profile')">
+                👤 Profile
+            </a>
+            <a class="menu-item" onclick="switchTab('support')">
+                💬 Support
+            </a>
+            <button class="logout-item" onclick="logout()">🚪 Logout</button>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Registration Tab -->
+            <div id="registration" class="dashboard-tab-content active">
+                <h2>Complete Your Registration</h2>
+                <p>Fill in your details and upload required documents to complete registration</p>
+
+                <form id="registrationForm" class="registration-form">
+                    <div id="formMessage" class="info-banner" aria-live="polite"></div>
+
+                    <!-- Personal Information Section -->
+                    <h3 class="form-section-title">Personal Information</h3>
+                    <div class="row">
+                        <div class="field">
+                            <label>Full Name</label>
+                            <input name="fullName" placeholder="Enter your full name" required>
+                        </div>
+                        <div class="field">
+                            <label>Email Address</label>
+                            <input name="email" type="email" placeholder="your@email.com" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="field">
+                            <label>Telephone Number</label>
+                            <input name="telephone" type="tel" placeholder="Enter your phone number" required>
+                        </div>
+                    </div>
+
+                    <!-- Academic Information Section -->
+                    <h3 class="form-section-title">Academic Information</h3>
+                    <div class="row">
+                        <div class="field">
+                            <label>Index Number</label>
+                            <input name="indexNumber" placeholder="0224022013" required>
+                        </div>
+                        <div class="field">
+                            <label>Student Level</label>
+                            <select name="level" class="styled-select" required>
+                                <option value="">Select Level</option>
+                                <option value="Fresher">Fresher</option>
+                                <option value="200">200 Level</option>
+                                <option value="300">300 Level</option>
+                                <option value="400">400 Level</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="field">
+                            <label>Department</label>
+                            <input name="programme" id="selectedDepartment" placeholder="Selected from home page" required>
+                        </div>
+                        <div class="field">
+                            <label>Class</label>
+                            <select name="programClass" class="styled-select" required>
+                                <option value="">Select Class</option>
+                                <option>Diploma</option>
+                                <option>BTech</option>
+                                <option>HND</option>
+                                <option>Weekend</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Documents Section -->
+                    <h3 class="form-section-title">Required Documents</h3>
+                    <div class="upload-section">
+                        <div class="field">
+                            <label>Passport Picture</label>
+                            <input type="file" name="passportPicture" accept="image/*" required>
+                        </div>
+                        <div class="field">
+                            <label>WASSCE or Senior High Certificate</label>
+                            <input type="file" name="wassceCertificate" accept=".pdf,image/*" required>
+                        </div>
+                        <div class="field">
+                            <label>Fees Receipt</label>
+                            <input type="file" name="feesReceipt" accept=".pdf,image/*" required>
+                        </div>
+                        <div class="field">
+                            <label>Course Registration Form</label>
+                            <input type="file" name="courseRegistrationForm" accept=".pdf,image/*" required>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="actions">
+                        <button type="button" id="payBtn" class="secondary">Proceed to Payment</button>
+                        <button type="submit" class="submit" disabled>Register Account</button>
+                        <button type="reset" class="reset">Clear Form</button>
+                    </div>
+                </form>
+
+                <!-- Payment Modal Dialog -->
+                <div id="paymentModal" class="modal hidden">
+                    <div class="modal-overlay"></div>
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Complete Payment</h3>
+                            <button type="button" id="closePaymentModal" class="modal-close">&times;</button>
+                        </div>
+                        <div id="paymentModalMessage" class="info-banner hidden"></div>
+                        
+                        <!-- Payment Details Form -->
+                        <div id="paymentDetailsForm" class="payment-form-step">
+                            <div class="field">
+                                <label>Payment Amount (GHS)</label>
+                                <input id="paymentAmount" type="number" placeholder="Enter amount" min="0.01" step="0.01" required>
+                            </div>
+
+                            <div class="field">
+                                <label>Mobile Number (for Mobile Money)</label>
+                                <input id="modalMobilePhone" placeholder="024xxxxxxxx" inputmode="tel">
+                            </div>
+
+                            <div class="field">
+                                <label>Mobile Money Provider</label>
+                                <select id="modalMobileProvider" class="styled-select">
+                                    <option value="">Select Provider (optional)</option>
+                                    <option>MTN</option>
+                                    <option>Vodafone</option>
+                                    <option>AirtelTigo</option>
+                                    <option>Telecel</option>
+                                </select>
+                            </div>
+
+                            <div class="modal-actions">
+                                <button type="button" id="makePaymentBtn" class="modal-btn primary">Make Payment</button>
+                                <button type="button" id="cancelPaymentBtn" class="modal-btn secondary">Cancel</button>
+                            </div>
+                        </div>
+
+                        <!-- Payment Confirmation -->
+                        <div id="paymentConfirmStep" class="payment-form-step hidden">
+                            <div class="payment-success-icon">✓</div>
+                            <p class="confirmation-text">Payment processed successfully!</p>
+                            <p class="reference-text" id="paymentReference"></p>
+                            <div class="modal-actions">
+                                <button type="button" id="confirmPaymentBtn" class="modal-btn primary">Confirm & Download Receipt</button>
+                                <button type="button" id="closeConfirmBtn" class="modal-btn secondary">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Tab -->
+            <div id="profile" class="dashboard-tab-content">
+                <h2>Your Profile</h2>
+                
+                <!-- Profile Card -->
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <div style="display: flex; gap: 1rem; align-items: center; flex: 1;">
+                            <div class="profile-avatar" id="userInitials">TK</div>
+                            <div class="profile-info">
+                                <h3 id="profileName">Loading...</h3>
+                                <span class="profile-status" id="profileStatus">Pending Completion</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profile Details Grid -->
+                    <div class="profile-detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Email Address</div>
+                            <div class="detail-value" id="profileEmail">-</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Index Number</div>
+                            <div class="detail-value" id="profileIndexNumber">-</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Department</div>
+                            <div class="detail-value" id="profileDepartment">-</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Student Level</div>
+                            <div class="detail-value" id="profileLevel">-</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Programme</div>
+                            <div class="detail-value" id="profileProgramme">-</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Class</div>
+                            <div class="detail-value" id="profileClass">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Status -->
+                <div id="paymentStatusDiv"></div>
+
+                <!-- Verification Status -->
+                <div style="background: #f5f7fa; padding: 1.5rem; border-radius: 8px; margin-top: 2rem;">
+                    <h4>Registration Status</h4>
+                    <p id="verificationStatus">Loading verification status...</p>
+                </div>
+            </div>
+
+            <!-- Support Tab -->
+            <div id="support" class="dashboard-tab-content">
+                <h2>Support & Help</h2>
+                <p>Get answers to common questions and contact support</p>
+
+                <div class="support-content">
+                    <div class="support-box">
+                        <h4>📝 How do I complete my registration?</h4>
+                        <p>Go to the Registration tab, fill in your personal and academic information, upload required documents, and proceed to payment. Your registration will be confirmed once payment is verified.</p>
+                    </div>
+
+                    <div class="support-box">
+                        <h4>💰 What payment methods are accepted?</h4>
+                        <p>We accept mobile money payments via MTN Mobile Money, Vodafone Cash, AirtelTigo Money, and Telecel Cash. Payment is processed securely through Paystack.</p>
+                    </div>
+
+                    <div class="support-box">
+                        <h4>📄 What documents are required?</h4>
+                        <p>You will need to upload: National ID/Student ID, proof of admission, and a recent passport photograph. Acceptable formats are PDF, JPG, and PNG (max 5MB each).</p>
+                    </div>
+
+                    <div class="support-box">
+                        <h4>💳 How much is the registration fee?</h4>
+                        <p>The registration fee depends on your student level: <strong>Freshers: GHS 350</strong> | <strong>Continuing Students (200L+): GHS 400</strong></p>
+                    </div>
+
+                    <div class="support-box">
+                        <h4>✅ When will my registration be confirmed?</h4>
+                        <p>Your registration is typically confirmed within 24 hours of successful payment and document verification. You'll receive an email confirmation.</p>
+                    </div>
+
+                    <div class="support-box">
+                        <h4>🔐 Is my information secure?</h4>
+                        <p>Yes! We use industry-standard encryption and secure payment gateways. Your personal information is never shared with third parties.</p>
+                    </div>
+
+                    <div class="support-box">
+                        <h4>❓ Need more help?</h4>
+                        <p>Contact our support team: <a href="mailto:support@registration.edu.gh">support@registration.edu.gh</a> or call +233-XXXX-XXXX (Monday-Friday, 9AM-5PM)</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Include libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="config.js"></script>
+    <script src="dashboard.js"></script>
+    <script>
+        // Tab switching functionality
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.dashboard-tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Remove active class from all menu items
+            document.querySelectorAll('.dashboard-sidebar .menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked menu item
+            event.target.classList.add('active');
+        }
+
+        // Logout function
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                const deptScope = String(
+                    sessionStorage.getItem('selectedDepartment') ||
+                    localStorage.getItem('studentDepartment') ||
+                    'default'
+                ).toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '') || 'default';
+
+                // Clear all draft keys (legacy + scoped)
+                Object.keys(localStorage).forEach((key) => {
+                    if (key === 'registrationDraftV1' || key.startsWith('registrationDraftV1_')) {
+                        localStorage.removeItem(key);
+                    }
+                });
+
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('studentData');
+                sessionStorage.removeItem('provisionalStudentId');
+                sessionStorage.removeItem('selectedDepartment');
+                try {
+                    indexedDB.deleteDatabase('registrationDraftFiles');
+                    indexedDB.deleteDatabase(`registrationDraftFiles_${deptScope}`);
+                } catch (error) {
+                    // Ignore local cleanup issues during logout.
+                }
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Initialize dashboard on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check authentication
+            const authToken = localStorage.getItem('authToken');
+            if (!authToken) {
+                window.location.href = 'student-login.html';
+                return;
+            }
+
+            // Load student data
+            loadStudentData();
+        });
+
+        // Load student data from backend or localStorage
+        async function loadStudentData() {
+            try {
+                const authToken = localStorage.getItem('authToken');
+                const response = await fetch(`${API_BASE_URL}/api/students/profile`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (response.ok) {
+                    const student = await response.json();
+                    populateProfileData(student);
+                    updateUI(student);
+                } else {
+                    // Fallback to localStorage
+                    const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
+                    if (Object.keys(studentData).length > 0) {
+                        updateUI(studentData);
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading student data:', error);
+            }
+        }
+
+        // Update UI with student data
+        function updateUI(student) {
+            // Update greeting
+            const firstName = student.fullName?.split(' ')[0] || 'Student';
+            document.getElementById('userGreeting').textContent = `Hello, ${firstName}`;
+
+            // Update department badge
+            if (student.programme) {
+                document.getElementById('departmentBadge').textContent = student.programme;
+            }
+        }
+
+        // Populate profile tab with student data
+        function populateProfileData(student) {
+            document.getElementById('profileName').textContent = student.fullName || 'Not Set';
+            document.getElementById('profileEmail').textContent = student.email || '-';
+            document.getElementById('profileIndexNumber').textContent = student.indexNumber || '-';
+            document.getElementById('profileDepartment').textContent = student.programme || '-';
+            document.getElementById('profileLevel').textContent = student.level || '-';
+            document.getElementById('profileProgramme').textContent = student.programme || '-';
+            document.getElementById('profileClass').textContent = student.programClass || '-';
+
+            // Set user initials
+            if (student.fullName) {
+                const initials = student.fullName.split(' ').map(n => n[0]).join('').toUpperCase();
+                document.getElementById('userInitials').textContent = initials.substring(0, 2);
+            }
+
+            // Update payment status
+            updatePaymentStatus(student);
+        }
+
+        // Update payment status display
+        function updatePaymentStatus(student) {
+            const paymentDiv = document.getElementById('paymentStatusDiv');
+            if (student.paymentVerified) {
+                paymentDiv.innerHTML = `
+                    <div class="payment-status">
+                        <h4>✓ Payment Confirmed</h4>
+                        <p>Your payment has been verified. Your registration is complete and confirmed.</p>
+                    </div>
+                `;
+                document.getElementById('profileStatus').textContent = 'Completed';
+                document.getElementById('profileStatus').style.background = '#e8f5e9';
+                document.getElementById('profileStatus').style.color = '#2e7d32';
+            } else {
+                paymentDiv.innerHTML = `
+                    <div class="payment-status unpaid">
+                        <h4>⏳ Pending Payment</h4>
+                        <p>Your registration is pending payment verification. Go to the Registration tab to complete your payment.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Update verification status
+        function updateVerificationStatus(student) {
+            const statusDiv = document.getElementById('verificationStatus');
+            if (student.paymentVerified) {
+                statusDiv.innerHTML = '<strong style="color: #2e7d32;">✓ Verified</strong> - All requirements met. You are fully registered.';
+            } else {
+                statusDiv.innerHTML = '<strong style="color: #f57c00;">⏳ Pending</strong> - Complete the registration form and make payment to finalize.';
+            }
+        }
+    </script>
+</body>
+</html>

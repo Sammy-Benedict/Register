@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Student Login - Department Portal</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="config.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const department = sessionStorage.getItem('selectedDepartment') || 'Department';
+            document.getElementById('pageTitle').textContent = `Student Login - ${department} Portal`;
+            const logoSpan = document.querySelector('.logo span');
+            if (logoSpan) logoSpan.textContent = `${department} Portal`;
+        });
+    </script>
+    <style>
+        /* Extra styles for login page */
+        .login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 450px;
+            padding: 2.5rem;
+            animation: slideDown 0.4s ease;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h1 {
+            font-size: 2rem;
+            color: #0c1b2a;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .login-header p {
+            color: #5a6b7a;
+            margin: 0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #0c1b2a;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.85rem;
+            border: 1px solid #e1e5ea;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #2f80ed;
+            box-shadow: 0 0 0 3px rgba(47, 128, 237, 0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 0.9rem;
+            background: linear-gradient(135deg, #2f80ed, #1f5bb5);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 8px 20px rgba(47, 128, 237, 0.3);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(47, 128, 237, 0.4);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .login-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .toggle-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #5a6b7a;
+        }
+
+        .toggle-link a {
+            color: #2f80ed;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .toggle-link a:hover {
+            text-decoration: underline;
+        }
+
+        .auth-message {
+            margin-bottom: 1rem;
+        }
+
+        .hidden-form {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .login-card {
+                padding: 2rem;
+            }
+
+            .login-header h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>Department Registration Portal</h1>
+                <p id="formTitle">Student Login</p>
+            </div>
+
+            <div id="authMessage" class="auth-message"></div>
+
+            <!-- Student Login Form -->
+            <form id="studentLoginForm">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="studentEmail" placeholder="your@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="studentPassword" placeholder="Enter your password" required>
+                </div>
+
+                <button type="submit" class="login-btn" id="studentLoginBtn">Login</button>
+
+                <div class="toggle-link">
+                    Don't have an account? <a onclick="toggleForms()">Register here</a>
+                </div>
+            </form>
+
+            <!-- Student Registration Form -->
+            <form id="studentRegisterForm" class="hidden-form">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="registerFullName" placeholder="Your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Index Number</label>
+                    <input type="text" id="registerIndexNumber" placeholder="e.g., 0224022013" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="registerEmail" placeholder="your@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="registerPassword" placeholder="Create a password" required>
+                </div>
+
+                <button type="submit" class="login-btn" id="studentRegisterBtn">Register</button>
+
+                <div class="toggle-link">
+                    Already have an account? <a onclick="toggleForms()">Login here</a>
+                </div>
+            </form>
+
+            <div class="toggle-link" style="margin-top: 2rem; border-top: 1px solid #e1e5ea; padding-top: 1rem;">
+                <a href="admin-login.html">Login as Admin</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        // ====================================================================
+        // STUDENT LOGIN/REGISTRATION SCRIPT
+        // ====================================================================
+
+        const API_BASE = window.APP_CONFIG?.API_BASE_URL || "http://localhost:5000";
+
+        // Get selected department from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedDepartment = urlParams.get('department');
+
+        // DOM Elements
+        const authMessage = document.getElementById("authMessage");
+        const studentLoginForm = document.getElementById("studentLoginForm");
+        const studentRegisterForm = document.getElementById("studentRegisterForm");
+        const formTitle = document.getElementById("formTitle");
+
+        /**
+         * Display authentication message to user
+         * @param {string} message - The message to display
+         * @param {string} type - Type: 'success', 'error', or 'info'
+         */
+        const showMessage = (message, type = "info") => {
+            authMessage.textContent = message;
+            authMessage.className = `info-banner ${type}`;
+        };
+
+        /**
+         * Toggle between login and registration forms
+         */
+        function toggleForms() {
+            studentLoginForm.classList.toggle("hidden-form");
+            studentRegisterForm.classList.toggle("hidden-form");
+            formTitle.textContent = studentLoginForm.classList.contains("hidden-form") 
+                ? "Student Registration" 
+                : "Student Login";
+            showMessage("", "info");
+        }
+
+        /**
+         * Handle student login
+         */
+        studentLoginForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById("studentEmail").value;
+            const password = document.getElementById("studentPassword").value;
+
+            if (!email || !password) {
+                showMessage("Please fill in all fields", "error");
+                return;
+            }
+
+            try {
+                showMessage("Logging in...", "info");
+                const response = await fetch(`${API_BASE}/api/auth/student`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const result = await response.json();
+
+                if (!response.ok || result.status !== "success") {
+                    showMessage(result.message || "Login failed", "error");
+                    return;
+                }
+
+                // Store token and student data in localStorage
+                localStorage.setItem("authToken", result.token);
+                localStorage.setItem("studentData", JSON.stringify(result.student));
+                
+                // Store department if coming from department selection
+                if (selectedDepartment) {
+                    localStorage.setItem("studentDepartment", selectedDepartment);
+                    sessionStorage.setItem("selectedDepartment", selectedDepartment);
+                }
+
+                showMessage("Login successful! Redirecting...", "success");
+                setTimeout(() => {
+                    window.location.href = "student-dashboard.html";
+                }, 1500);
+            } catch (error) {
+                showMessage("Login failed. Check server connection.", "error");
+            }
+        });
+
+        /**
+         * Handle student registration
+         */
+        studentRegisterForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const fullName = document.getElementById("registerFullName").value;
+            const indexNumber = document.getElementById("registerIndexNumber").value;
+            const email = document.getElementById("registerEmail").value;
+            const password = document.getElementById("registerPassword").value;
+
+            if (!fullName || !indexNumber || !email || !password) {
+                showMessage("Please fill in all fields", "error");
+                return;
+            }
+
+            try {
+                showMessage("Creating account...", "info");
+                const response = await fetch(`${API_BASE}/api/auth/student`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ fullName, indexNumber, email, password })
+                });
+
+                const result = await response.json();
+
+                if (!response.ok || result.status !== "success") {
+                    showMessage(result.message || "Registration failed", "error");
+                    return;
+                }
+
+                // Store token and student data in localStorage
+                localStorage.setItem("authToken", result.token);
+                localStorage.setItem("studentData", JSON.stringify(result.student));
+                
+                // Store department if coming from department selection
+                if (selectedDepartment) {
+                    localStorage.setItem("studentDepartment", selectedDepartment);
+                    sessionStorage.setItem("selectedDepartment", selectedDepartment);
+                }
+
+                showMessage("Registration successful! Redirecting...", "success");
+                setTimeout(() => {
+                    window.location.href = "student-dashboard.html";
+                }, 1500);
+            } catch (error) {
+                showMessage("Registration failed. Check server connection.", "error");
+            }
+        });
+    </script>
+</body>
+</html>
