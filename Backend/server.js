@@ -13,7 +13,10 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
-
+const admin = require("./routes/admin.js");
+const student = require("./routes/students.js");
+const payment = require("./routes/payment.js");
+const auth = require("./routes/auth.js");
 // Initialize Express application
 const app = express();
 
@@ -87,16 +90,16 @@ mongoose.connect(process.env.MONGO_URI)
 // ============================================================================
 
 // Authentication routes - student and admin login/registration
-app.use("/api/auth", require("./routes/auth"));
+app.use("/api/auth", auth);
 
 // Student management routes - create, read, update student records
-app.use("/api/students", require("./routes/students"));
+app.use("/api/students", student);
 
 // Payment routes - initialize and verify Paystack transactions
-app.use("/api/payment", require("./routes/payment"));
+app.use("/api/payment", payment);
 
 // Admin routes - administrative dashboard and reports
-app.use("/api/admin", require("./routes/admin"));
+app.use("/api/admin", admin);
 
 // Error handler: return JSON for multer and unexpected server errors.
 app.use((err, req, res, next) => {
