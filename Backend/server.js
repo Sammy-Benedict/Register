@@ -110,5 +110,8 @@ app.use((err, req, res, next) => {
 // ============================================================================
 
 // Start the Express server on pconst PORT = process.env.PORT || 5000;
+// Start the Express server (Render supplies PORT)
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
 
