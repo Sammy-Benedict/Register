@@ -14,8 +14,8 @@ RUN mkdir public
 
 COPY --from=build /app/node_modules ./node_modules
 
-COPY Backend/* ./
-COPY Frontend/* ./public
+COPY Backend ./
+COPY Frontend ./public
 
 # EXPOSE 3000
 
