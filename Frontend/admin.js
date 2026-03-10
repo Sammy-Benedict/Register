@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const API_BASE = window.APP_CONFIG?.API_BASE_URL || "http://localhost:5000";
+    const API_BASE = window.location.origin|| "http://localhost:5000";
     const authToken = localStorage.getItem("authToken");
     const userRole = localStorage.getItem("userRole");
 

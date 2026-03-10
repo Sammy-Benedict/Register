@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // API configuration
-    const API_BASE = window.APP_CONFIG?.API_BASE_URL || 'http://localhost:5000';
+    const API_BASE = window.location.origin|| 'http://localhost:5000';
     
     // Get selected department from session/query params
     const urlParams = new URLSearchParams(window.location.search);

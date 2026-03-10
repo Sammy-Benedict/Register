@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ========================================================================
     
     // API endpoint and registration fee from config or defaults
-    const API_BASE = window.APP_CONFIG?.API_BASE_URL || "http://localhost:5000";
+    const API_BASE = window.location.origin|| "http://localhost:5000";
     const REGISTRATION_FEE = Number(window.APP_CONFIG?.REGISTRATION_FEE || 350);
 
     // Form and related elements

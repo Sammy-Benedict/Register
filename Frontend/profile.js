@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ========================================================================
     
     // API endpoint from config or defaults
-    const API_BASE = window.APP_CONFIG?.API_BASE_URL || "http://localhost:5000";
+    const API_BASE = window.location.origin|| "http://localhost:5000";
     
     // Number of documents required for registration
     const requiredDocuments = 2;
