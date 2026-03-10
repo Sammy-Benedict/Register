@@ -12,6 +12,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const path = require("path");
 
 // Initialize Express application
 const app = express();
@@ -25,43 +26,53 @@ const mask = (s) => (s ? `***${String(s).slice(-4)}` : '<none>');
 console.log("PAYSTACK_SECRET env:", mask(process.env.PAYSTACK_SECRET));
 
 // Parse allowed origins from environment variables for CORS configuration
-const allowedOrigins = (process.env.CORS_ORIGINS || "")
-  .split(",")
-  .map((origin) => origin.trim())
-  .filter(Boolean);
+// const allowedOrigins = (process.env.CORS_ORIGINS || "")
+//   .split(",")
+//   .map((origin) => origin.trim())
+//   .filter(Boolean);
+
+  const allowedOrigins =[
+    "*"
+  ]
 
 // ============================================================================
 // MIDDLEWARE - CORS (Cross-Origin Resource Sharing)
 // ============================================================================
 // Configure CORS to allow requests from specified frontend origins
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      // Allow requests without origin (like mobile apps or curl)
-      if (!origin || origin === "null") {
-        return callback(null, true);
-      }
-      // Allow requests from configured origins or any origin if none specified
-      if (!allowedOrigins.length || allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-      return callback(null, true);
-    }
-  })
-);
+// app.use(
+//   cors({
+//     origin: (origin, callback) => {
+//       // Allow requests without origin (like mobile apps or curl)
+//       if (!origin || origin === "null") {
+//         return callback(null, true);
+//       }
+//       // Allow requests from configured origins or any origin if none specified
+//       if (!allowedOrigins.length || allowedOrigins.includes(origin)) {
+//         return callback(null, true);
+//       }
+//       return callback(null, true);
+//     }
+//   })
+// );
+
+app.use(cors({
+  origin: '*'
+}))
 
 // ============================================================================
 // MIDDLEWARE - REQUEST PARSING & STATIC FILES
 // ============================================================================
+// Parse incoming JSON requests
+app.use(express.json());
+app.use("/", express.static(path.join(__dirname, "public")));
+app.use("/uploads", express.static("uploads"));
+
 
 // Special middleware for payment webhook - store raw request body for signature verification
 app.use("/api/payment/webhook", express.raw({ type: "application/json" }));
 
-// Parse incoming JSON requests
-app.use(express.json());
 
 // Serve uploaded files (documents) as static content
-app.use("/uploads", express.static("uploads"));
 
 // ============================================================================
 // DATABASE CONNECTION
